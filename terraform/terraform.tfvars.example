@@ -1,0 +1,7 @@
+# Copy to terraform.tfvars and fill in your values
+# DO NOT commit terraform.tfvars — it is gitignored
+
+tailscale_auth_key  = "tskey-auth-XXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+location            = "southcentralus"
+resource_group_name = "tailscale-subnet-router-lab-rg"
+vm_name             = "tailscale-lab-vm"
