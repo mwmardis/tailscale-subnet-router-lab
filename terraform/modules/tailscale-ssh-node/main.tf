@@ -56,7 +56,7 @@ resource "azurerm_virtual_machine_extension" "install_tailscale" {
   type_handler_version = "1.10"
 
   protected_settings = jsonencode({
-    commandToExecute = "powershell -ExecutionPolicy Unrestricted -Command \"Invoke-WebRequest -Uri 'https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi' -OutFile 'C:\\tailscale.msi'; Start-Process msiexec.exe -ArgumentList '/i C:\\tailscale.msi /quiet /norestart' -Wait; for ($i = 0; $i -lt 30; $i++) { $svc = Get-Service -Name Tailscale -ErrorAction SilentlyContinue; if ($svc -and $svc.Status -eq 'Running') { break }; Start-Sleep -Seconds 2 }; & 'C:\\Program Files\\Tailscale\\tailscale.exe' up --authkey=${var.tailscale_auth_key} --accept-routes\""
+    commandToExecute = "powershell -ExecutionPolicy Unrestricted -Command \"Invoke-WebRequest -Uri 'https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi' -OutFile 'C:\\tailscale.msi'; Start-Process msiexec.exe -ArgumentList '/i C:\\tailscale.msi /quiet /norestart' -Wait; for ($i = 0; $i -lt 30; $i++) { $svc = Get-Service -Name Tailscale -ErrorAction SilentlyContinue; if ($svc -and $svc.Status -eq 'Running') { break }; Start-Sleep -Seconds 2 }; & 'C:\\Program Files\\Tailscale\\tailscale.exe' up --authkey=${var.tailscale_auth_key} --accept-routes --ssh\""
   })
 
   tags = var.tags
