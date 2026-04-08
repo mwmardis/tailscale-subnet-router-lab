@@ -24,3 +24,4 @@ Thumbs.db
 *.pem
 *.key
 id_rsa
+.env
