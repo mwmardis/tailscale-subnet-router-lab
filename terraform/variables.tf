@@ -16,6 +16,12 @@ variable "vm_name" {
   default     = "tailscale-lab-vm"
 }
 
+variable "admin_username" {
+  description = "Admin username for the VM"
+  type        = string
+  default     = "azureuser"
+}
+
 variable "admin_password" {
   description = "Admin password for RDP/xrdp login"
   type        = string

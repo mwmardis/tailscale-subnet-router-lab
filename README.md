@@ -129,6 +129,7 @@ cp terraform.tfvars.example terraform.tfvars
 ```
 
 Edit `terraform.tfvars` with your values:
+- `admin_username` — Username for the VM (default: `azureuser`)
 - `admin_password` — Password for RDP access to the VM
 - `allowed_rdp_cidr` — Your public IP in CIDR notation (run `curl -s ifconfig.me` and append `/32`)
 
@@ -150,7 +151,7 @@ Terraform will:
 From the Azure VM (via Tailscale SSH or RDP), run the validation script:
 
 ```bash
-tailscale ssh azureuser@tailscale-lab-vm 'bash -s' < scripts/validate.sh
+tailscale ssh <admin_username>@tailscale-lab-vm 'bash -s' < scripts/validate.sh
 ```
 
 This checks:

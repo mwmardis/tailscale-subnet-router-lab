@@ -4,6 +4,7 @@
 tailscale_auth_key  = "tskey-auth-XXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 location            = "eastus"
 resource_group_name = "tailscale-subnet-router-lab-rg"
-vm_name             = "tailscale-lab-vm"
+vm_name              = "tailscale-lab-vm"
+admin_username       = "azureuser"
 admin_password       = "<admin_password_to_access_vm>"
 allowed_rdp_cidr     = "<public_ip>/32" #obtain value by running `curl ifconfig.me` from a terminal on your local machine

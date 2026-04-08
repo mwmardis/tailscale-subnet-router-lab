@@ -49,6 +49,7 @@ module "tailscale_ssh_node" {
   location            = azurerm_resource_group.main.location
   subnet_id           = module.network.subnet_id
   vm_name             = var.vm_name
+  admin_username      = var.admin_username
   admin_password      = var.admin_password
   tailscale_auth_key  = tailscale_tailnet_key.main.key
   tags                = var.tags
