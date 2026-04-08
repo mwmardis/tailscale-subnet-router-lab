@@ -2,6 +2,8 @@
 # DO NOT commit terraform.tfvars — it is gitignored
 
 tailscale_auth_key  = "tskey-auth-XXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-location            = "southcentralus"
+location            = "eastus"
 resource_group_name = "tailscale-subnet-router-lab-rg"
 vm_name             = "tailscale-lab-vm"
+admin_password       = "<admin_password_to_access_vm>"
+allowed_rdp_cidr     = "<public_ip>/32" #obtain value by running `curl ifconfig.me` from a terminal on your local machine
