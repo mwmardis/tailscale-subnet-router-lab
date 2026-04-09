@@ -1,10 +1,11 @@
 # Copy to terraform.tfvars and fill in your values
 # DO NOT commit terraform.tfvars — it is gitignored
 
-tailscale_auth_key  = "tskey-auth-XXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+# Tailscale OAuth credentials (create at https://login.tailscale.com/admin/settings/oauth)
+tailscale_oauth_client_id     = "k1234567890abcdef"
+tailscale_oauth_client_secret = "tskey-client-XXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
 location            = "eastus"
 resource_group_name = "tailscale-subnet-router-lab-rg"
-vm_name              = "tailscale-lab-vm"
-admin_username       = "azureuser"
-admin_password       = "<admin_password_to_access_vm>"
-allowed_rdp_cidr     = "<public_ip>/32" #obtain value by running `curl ifconfig.me` from a terminal on your local machine
+vm_name             = "tailscale-lab-vm"
+admin_username      = "azureuser"

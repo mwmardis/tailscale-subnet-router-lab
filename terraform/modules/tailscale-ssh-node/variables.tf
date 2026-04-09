@@ -26,12 +26,6 @@ variable "admin_username" {
   default     = "azureuser"
 }
 
-variable "admin_password" {
-  description = "Admin password for RDP login"
-  type        = string
-  sensitive   = true
-}
-
 variable "subnet_id" {
   description = "Subnet ID for the VM NIC"
   type        = string
