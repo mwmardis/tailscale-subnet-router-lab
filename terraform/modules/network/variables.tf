@@ -32,11 +32,6 @@ variable "subnet_address_prefixes" {
   default     = ["10.0.1.0/24"]
 }
 
-variable "allowed_rdp_cidr" {
-  description = "CIDR allowed to RDP into the VM (e.g., your public IP as x.x.x.x/32)"
-  type        = string
-}
-
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

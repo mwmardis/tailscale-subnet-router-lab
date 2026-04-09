@@ -20,18 +20,7 @@ resource "azurerm_network_security_group" "main" {
   tags                = var.tags
 
   # Tailscale uses outbound-only DERP/STUN connections for mesh connectivity.
-  # RDP is allowed inbound for desktop demo access.
-  security_rule {
-    name                       = "Allow-RDP"
-    priority                   = 1000
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "3389"
-    source_address_prefix      = var.allowed_rdp_cidr
-    destination_address_prefix = "*"
-  }
+  # No inbound rules needed — all access is via Tailscale SSH.
 }
 
 resource "azurerm_subnet_network_security_group_association" "main" {

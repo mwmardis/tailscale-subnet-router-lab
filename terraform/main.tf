@@ -10,6 +10,14 @@ terraform {
       source  = "tailscale/tailscale"
       version = "~> 0.28"
     }
+    cloudinit = {
+      source  = "hashicorp/cloudinit"
+      version = ">= 2.0"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
   }
 }
 
@@ -17,7 +25,10 @@ provider "azurerm" {
   features {}
 }
 
-provider "tailscale" {}
+provider "tailscale" {
+  oauth_client_id     = var.tailscale_oauth_client_id
+  oauth_client_secret = var.tailscale_oauth_client_secret
+}
 
 resource "azurerm_resource_group" "main" {
   name     = var.resource_group_name
@@ -30,7 +41,6 @@ module "network" {
 
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  allowed_rdp_cidr    = var.allowed_rdp_cidr
   tags                = var.tags
 }
 
@@ -40,6 +50,7 @@ resource "tailscale_tailnet_key" "main" {
   preauthorized = true
   expiry        = 3600
   description   = "Terraform-managed key for ${var.vm_name}"
+  tags          = ["tag:vm-lab"]
 }
 
 module "tailscale_ssh_node" {
@@ -50,7 +61,14 @@ module "tailscale_ssh_node" {
   subnet_id           = module.network.subnet_id
   vm_name             = var.vm_name
   admin_username      = var.admin_username
-  admin_password      = var.admin_password
   tailscale_auth_key  = tailscale_tailnet_key.main.key
   tags                = var.tags
+}
+
+module "desktop_environment" {
+  source = "./modules/desktop-environment"
+
+  virtual_machine_id = module.tailscale_ssh_node.vm_id
+  admin_username     = var.admin_username
+  tags               = var.tags
 }

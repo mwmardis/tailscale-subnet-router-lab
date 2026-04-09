@@ -1,3 +1,14 @@
+variable "tailscale_oauth_client_id" {
+  description = "Tailscale OAuth client ID"
+  type        = string
+}
+
+variable "tailscale_oauth_client_secret" {
+  description = "Tailscale OAuth client secret"
+  type        = string
+  sensitive   = true
+}
+
 variable "location" {
   description = "Azure region"
   type        = string
@@ -20,17 +31,6 @@ variable "admin_username" {
   description = "Admin username for the VM"
   type        = string
   default     = "azureuser"
-}
-
-variable "admin_password" {
-  description = "Admin password for RDP/xrdp login"
-  type        = string
-  sensitive   = true
-}
-
-variable "allowed_rdp_cidr" {
-  description = "CIDR allowed to RDP into the VM (e.g., your public IP as x.x.x.x/32)"
-  type        = string
 }
 
 variable "tags" {
