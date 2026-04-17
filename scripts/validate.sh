@@ -16,8 +16,8 @@ PLEX_PORT="${PLEX_PORT:-32400}"
 PRINTER_IP="${PRINTER_IP:-192.168.1.223}"
 XBOX_IP="${XBOX_IP:-192.168.1.222}"
 TAILNET_NAME="${TAILNET_NAME:-bee-massometer.ts.net}"
-MAX_RETRIES=3
-RETRY_DELAY=2
+MAX_RETRIES=2
+RETRY_DELAY=1
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -57,23 +57,19 @@ check "Ping subnet router ($SUBNET_ROUTER_HOSTNAME)" \
   bash -c "tailscale ping -c 1 '$SUBNET_ROUTER_HOSTNAME' 2>&1 | grep -q 'pong'"
 
 # 3. Ping printer via subnet route
-check "Ping printer ($PRINTER_IP)" sudo ping -c 1 -W 5 "$PRINTER_IP"
+check "Ping printer ($PRINTER_IP)" ping -c 1 -W 5 "$PRINTER_IP"
 
 # 4. Ping Xbox via subnet route
-check "Ping Xbox ($XBOX_IP)" sudo ping -c 1 -W 5 "$XBOX_IP"
+check "Ping Xbox ($XBOX_IP)" ping -c 1 -W 5 "$XBOX_IP"
 
 # 5. Curl Plex Web UI via subnet route
 check "Curl Plex ($PLEX_IP:$PLEX_PORT/web)" \
-  sudo curl -sL --max-time 10 -o /dev/null -w "%{http_code}" "http://$PLEX_IP:$PLEX_PORT/web"
+  curl -sL --max-time 10 -o /dev/null -w "%{http_code}" "http://$PLEX_IP:$PLEX_PORT/web"
 
-# 6. Show subnet route path — prove traffic flows through subnet router
-echo ""
-echo "── Subnet route path ──"
-echo "  Route to $PLEX_IP:"
-echo "    $(ip route get "$PLEX_IP" 2>/dev/null)"
-echo "  Subnet router providing route:"
-echo "    $(tailscale status | grep subnet-router || tailscale status | grep home)"
-echo ""
+# 6. Show subnet route path — prove traffic flowing through subnet router, not direct
+check "Tailscale ping path to Plex ($PLEX_IP)" \
+  bash -c "tailscale ping -c 1 --until-direct=false '$PLEX_IP' | grep -q 'pong from $SUBNET_ROUTER_HOSTNAME'"
+echo "  → $(tailscale ping -c 1 --until-direct=false "$PLEX_IP" | grep '^pong' | head -1)"
 
 # 7. Verify this machine is on the tailnet
 check "Tailnet membership ($TAILNET_NAME)" \

@@ -259,14 +259,14 @@ Run the validation script from your local machine:
 cat scripts/validate.sh | sed 's/\r$//' | tailscale ssh <admin_username>@tailscalevm 'bash -s'
 ```
 
-> **Note:** The `sed` command strips Windows line endings. The script uses `sudo` for network commands due to Tailscale SSH non-interactive session limitations.
+> **Note:** The `sed` command strips Windows line endings so the script executes cleanly when piped from Windows.
 
 This checks:
 - Tailscale daemon is running and authenticated
 - Subnet router is reachable via Tailscale
 - Home LAN devices (printer, Xbox, Plex server) are pingable through the subnet route
 - Plex Web UI responds over HTTP
-- Traffic is routed through `tailscale0` via the subnet router
+- `tailscale ping` to a LAN IP returns a pong from the subnet router, proving the subnet route (not a direct connection) carried the traffic
 - VM is a member of the expected tailnet
 
 ### Important: Local Machine Configuration
