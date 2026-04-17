@@ -59,7 +59,7 @@ The VM is accessed exclusively through **Tailscale SSH** — no public IP, no SS
 ## What This Demonstrates
 
 - **Subnet routing** — A Docker container on the home network advertises `192.168.1.0/24` to the tailnet, giving any tailnet device access to the entire LAN
-- **Infrastructure as code** — Terraform provisions the Azure VM, networking, and Tailscale auth via the [tailscale/tailscale/cloudinit](https://registry.terraform.io/modules/tailscale/tailscale/cloudinit/latest) module; Docker Compose runs the subnet router
+- **Infrastructure as code** — Terraform provisions the Azure VM, networking, and Tailscale auth using the [`hashicorp/azurerm`](https://registry.terraform.io/providers/hashicorp/azurerm/latest), [`tailscale/tailscale`](https://registry.terraform.io/providers/tailscale/tailscale/latest), [`hashicorp/cloudinit`](https://registry.terraform.io/providers/hashicorp/cloudinit/latest), and [`hashicorp/tls`](https://registry.terraform.io/providers/hashicorp/tls/latest) providers, along with the [tailscale/tailscale/cloudinit](https://registry.terraform.io/modules/tailscale/tailscale/cloudinit/latest) module; Docker Compose runs the subnet router using the official [`tailscale/tailscale`](https://hub.docker.com/r/tailscale/tailscale) image from Docker Hub
 - **Zero-trust networking** — No inbound ports opened, no public IP on the VM. Access is exclusively via Tailscale SSH
 - **OAuth-based provider auth** — The Tailscale Terraform provider uses OAuth client credentials (not user-scoped API keys) for machine-to-machine automation
 - **ACL-driven route approval (optional)** — `autoApprovers` in the Tailscale ACL policy can auto-approve subnet routes from devices tagged `tag:subnet-router`, eliminating manual admin steps
