@@ -183,8 +183,46 @@ Edit `terraform.tfvars` with your values:
 - `tailscale_oauth_client_secret` — OAuth client secret from step 3
 - `admin_username` — Username for the VM (default: `azureuser`)
 
+Next, authenticate to Azure using **one** of the following options.
+
+**Option A — Azure CLI (interactive, simplest):**
+
 ```bash
 az login
+```
+
+**Option B — Service Principal (non-interactive, better for automation):**
+
+Create a service principal scoped to your subscription:
+
+```bash
+az ad sp create-for-rbac \
+  --name tailscale-lab-sp \
+  --role Contributor \
+  --scopes /subscriptions/<subscription-id>
+```
+
+Save the output `appId`, `password`, `tenant`, and your subscription ID into a gitignored `.env` file at the repo root. The `export` prefix is required so `source` propagates the variables to child processes (including Terraform):
+
+```bash
+# .env — gitignored, never commit
+export ARM_CLIENT_ID="<appId from az ad sp output>"
+export ARM_CLIENT_SECRET="<password from az ad sp output>"
+export ARM_SUBSCRIPTION_ID="<your Azure subscription id>"
+export ARM_TENANT_ID="<tenant from az ad sp output>"
+```
+
+Then load the variables into your shell:
+
+```bash
+source .env
+```
+
+The `azurerm` Terraform provider auto-detects `ARM_*` environment variables and uses them for authentication — no changes to the provider block required.
+
+Finally (regardless of auth method):
+
+```bash
 terraform init
 terraform plan
 terraform apply
