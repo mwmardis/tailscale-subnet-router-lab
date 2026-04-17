@@ -277,7 +277,7 @@ If your local machine runs Tailscale **and** is on the same LAN as the subnet ro
 tailscale set --accept-routes=false
 ```
 
-Otherwise, your local machine routes LAN traffic through Tailscale instead of directly over the LAN, creating a routing loop. Only the Azure VM needs `--accept-routes=true`.
+Otherwise, your local machine routes LAN traffic through Tailscale (hairpinning via the subnet router) instead of directly over the LAN. This causes asymmetric routing and can drop packets when the reply returns over the LAN with an unexpected source IP — see Tailscale's [Can't connect to LAN](https://tailscale.com/docs/reference/troubleshooting/connectivity/connect-lan-failure) troubleshooting guide. Only the Azure VM needs `--accept-routes=true`.
 
 ## Teardown
 
